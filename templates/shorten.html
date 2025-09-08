@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+{% block title %}URL Shortener{% endblock %}
+{% block content %}
+<div class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-md-6">
+      <div class="card shadow-lg rounded-4">
+        <div class="card-body p-4">
+          <h2 class="text-center mb-4">URL SHORTENER</h2>
+
+          <!-- Form -->
+          <form method="POST" class="mb-3">
+            <div class="mb-3">
+              <input type="url" class="form-control" name="original_url"
+                     placeholder="Enter long URL" required>
+            </div>
+            <div class="mb-3">
+              <input type="text" class="form-control" name="custom_alias"
+                     placeholder="Custom alias (optional)">
+            </div>
+            <button type="submit" class="btn btn-primary w-100">Shorten</button>
+          </form>
+
+          <!-- Shortened URL Display -->
+          {% if short_url %}
+          <div class="alert alert-success d-flex justify-content-between align-items-center">
+            <div>
+              <p class="mb-1 fw-bold">Your Shortened URL:</p>
+              <a href="{{ short_url }}" target="_blank" id="shortUrl">{{ short_url }}</a>
+              <small id="copyMsg" class="text-success ms-2 d-none">Copied!</small>
+            </div>
+            <button class="btn btn-sm btn-outline-dark ms-3"
+                    onclick="copyToClipboard()">📋 Copy</button>
+          </div>
+          {% endif %}
+
+          <!-- Flash messages -->
+          {% with messages = get_flashed_messages() %}
+            {% if messages %}
+              <div class="alert alert-danger mt-2">
+                {% for msg in messages %}
+                  <div>{{ msg }}</div>
+                {% endfor %}
+              </div>
+            {% endif %}
+          {% endwith %}
+
+          <!-- Navigation -->
+          <div class="d-flex justify-content-center mt-3 gap-2">
+            <a href="{{ url_for('home') }}" class="btn btn-dark">🏠 Home</a>
+            <a href="{{ url_for('dashboard') }}" class="btn btn-secondary">📂 Organizer</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+function copyToClipboard() {
+  const urlElement = document.getElementById("shortUrl");
+  const url = urlElement.href;
+
+  navigator.clipboard.writeText(url).then(() => {
+    const msg = document.getElementById("copyMsg");
+    msg.classList.remove("d-none");
+    setTimeout(() => msg.classList.add("d-none"), 2000);
+  });
+}
+</script>
+{% endblock %}

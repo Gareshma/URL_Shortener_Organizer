@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>URL Shortener</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+    <div class="container py-5">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="card shadow-lg rounded-4">
+                    <div class="card-body p-4">
+                        <h2 class="text-center mb-4">URL Shortener</h2>
+                        <form method="POST" class="mb-3">
+                            <div class="mb-3">
+                                <label for="original_url" class="form-label">Enter Long URL</label>
+                                <input type="url" class="form-control" id="original_url" name="original_url" placeholder="https://example.com/long-link" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="custom_alias" class="form-label">Custom Alias (optional)</label>
+                                <input type="text" class="form-control" id="custom_alias" name="custom_alias" placeholder="My Custom Name">
+                            </div>
+                            <button type="submit" class="btn btn-primary w-100">Shorten</button>
+                        </form>
+
+                        {% if short_url %}
+                        <div class="alert alert-success text-center">
+                            <p class="mb-1">Your Shortened URL:</p>
+                            <a href="{{ short_url }}" target="_blank">{{ short_url }}</a>
+                        </div>
+                        {% endif %}
+
+                        {% with messages = get_flashed_messages() %}
+                          {% if messages %}
+                            <div class="alert alert-danger mt-2">
+                                {% for msg in messages %}
+                                  <div>{{ msg }}</div>
+                                {% endfor %}
+                            </div>
+                          {% endif %}
+                        {% endwith %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

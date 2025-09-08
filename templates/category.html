@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block title %}{{ category.name }}{% endblock %}
+{% block content %}
+<h2 class="mb-4">{{ category.name }} Links</h2>
+
+<ul id="linksList" class="list-group mb-4">
+  {% for link in links %}
+    <li class="list-group-item"><a href="{{ link.url }}" target="_blank">{{ link.label }}</a></li>
+  {% else %}
+    <li class="list-group-item">No links yet. Add one!</li>
+  {% endfor %}
+</ul>
+
+<form onsubmit="addLink(event, '{{ category.id|tojson }}')">
+  <div class="mb-3">
+    <input type="text" id="label" class="form-control" placeholder="Link Label">
+  </div>
+  <div class="mb-3">
+    <input type="url" id="url" class="form-control" placeholder="https://example.com">
+  </div>
+  <button type="submit" class="btn btn-primary">Add Link</button>
+</form>
+
+<div class="mt-4">
+  <a href="{{ url_for('dashboard') }}" class="btn btn-secondary">← Back</a>
+  <a href="{{ url_for('home') }}" class="btn btn-dark">Home</a>
+</div>
+
+<!-- Include external JS -->
+<script src="{{ url_for('static', filename='js/category.js') }}"></script>
+{% endblock %}
