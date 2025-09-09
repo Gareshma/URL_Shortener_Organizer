@@ -184,13 +184,28 @@ def export_links(category_id):
     category = Category.query.get_or_404(category_id)
     links = Link.query.filter_by(category_id=category_id).all()
 
-    data = [{"Label": l.label, "URL": l.url, "Created At": l.created_at} for l in links]
+    data = []
+    for l in links:
+        row = {
+            "Label": l.label,
+            "URL": l.url
+        }
+        # Add created_at only if the field exists
+        if hasattr(l, "created_at"):
+            row["Created At"] = l.created_at
+        data.append(row)
+
+    import pandas as pd, io
+
+    # Handle empty category
+    if not data:
+        data = [{"Label": "No Links", "URL": "N/A"}]
 
     df = pd.DataFrame(data)
 
     output = io.BytesIO()
     with pd.ExcelWriter(output, engine="xlsxwriter") as writer:
-        df.to_excel(writer, index=False, sheet_name=category.name)
+        df.to_excel(writer, index=False, sheet_name=category.name[:30])  # sheet name max 31 chars
 
     output.seek(0)
 
